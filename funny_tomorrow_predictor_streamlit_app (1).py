@@ -4,15 +4,18 @@ import datetime
 import time
 
 # ------------------ PAGE CONFIG ------------------
-st.set_page_config(page_title="Tomorrow Predictor 🔮", page_icon="🔮", layout="centered")
+st.set_page_config(
+    page_title="Tomorrow Predictor 🔮",
+    page_icon="🔮",
+    layout="centered"
+)
 
-# ------------------ MATRIX BACKGROUND & TERMINAL STYLE ------------------
+# ------------------ MATRIX BACKGROUND ------------------
 st.markdown(
     """
     <style>
     body {
         background: black;
-        color: #00ff41;
     }
 
     .matrix {
@@ -38,11 +41,13 @@ st.markdown(
     }
 
     .terminal {
-        background-color: #000000;
+        background-color: black;
         border: 1px solid #00ff41;
+        color: #00ff41;
         padding: 10px;
         font-family: monospace;
         font-size: 14px;
+        margin-top: 8px;
     }
     </style>
 
@@ -51,44 +56,46 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# ------------------ BACKGROUND ANIMATION ------------------
+# ------------------ TITLE ------------------
+st.title("🔮 Tomorrow Prediction App )")
 st.markdown(
-    """
-    <style>
-    body {
-        background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364);
-        background-size: 400% 400%;
-        animation: gradientBG 10s ease infinite;
-    }
-
-    @keyframes gradientBG {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-    }
-
-    .stProgress > div > div > div > div {
-        background-image: linear-gradient(to right, #00ffcc, #00ccff);
-    }
-    </style>
-    """,
+    "<span style='color:#00ff41'>Ultra-advanced prediction system powered by vibes, chai & Mars 🚀</span>",
     unsafe_allow_html=True
 )
 
-# ------------------ TITLE ------------------
-st.title("🔮 Tomorrow Prediction App )")
-st.write("Ultra‑advanced prediction system powered by ISRO + Mars + Elon Musk 🚀😂")
-
 # ------------------ USER INPUT ------------------
 name = st.text_input("Enter your name:", "Ankit")
+
+# ------------------ TYPEWRITER (FIXED VISIBILITY) ------------------
+def type_writer(text, delay=0.04):
+    placeholder = st.empty()
+    output = ""
+    for char in text:
+        output += char
+        placeholder.markdown(
+            f"""
+            <div style="
+                color:#00ff41;
+                font-family: monospace;
+                font-size:16px;
+                background-color:black;
+                padding:6px;
+                border-left:3px solid #00ff41;
+            ">
+            {output}<span style="animation:blink 1s infinite">▌</span>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+        time.sleep(delay)
 
 # ------------------ BUTTON ------------------
 if st.button("🚀 Start Prediction"):
 
     progress = st.progress(0)
+    terminal_box = st.empty()
     status = st.empty()
 
-    # Fake scientific loading steps
     steps = [
         "📡 Aligning jugaad antenna towards ISRO headquarters…",
         "☎️ Putting ISRO scientists on hold (music playing)…",
@@ -101,39 +108,70 @@ if st.button("🚀 Start Prediction"):
         "📊 Pretending this took 10,000 GPU hours…"
     ]
 
+    # ------------------ LOADING STEPS ------------------
     for i, step in enumerate(steps):
-        status.write(step)
-        time.sleep(2.5)
+        with st.spinner("🛰️ Processing signals…"):
+            type_writer(step)
+
+        terminal_box.markdown(
+            f"""
+            <div class="terminal">
+            [LOG {i+1:02}] {step}<br>
+            📡 BEEP… BEEP… Signal locked ✔
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
         progress.progress(int((i + 1) / len(steps) * 100))
+        time.sleep(2.5)  # slow enough to read
 
-    status.write("✅ Prediction Complete!")
+    # ------------------ SATELLITE / MARS ANIMATION ------------------
+    sat = st.empty()
+    frames = ["🛰️", "➡️", "🌍", "➡️", "🌕", "➡️", "🔴"]
 
-    # ------------------ PREDICTION LOGIC ------------------
+    for _ in range(2):
+        for f in frames:
+            sat.markdown(f"<h2 style='color:#00ff41'>{f}</h2>", unsafe_allow_html=True)
+            time.sleep(0.3)
+
+    # ------------------ CONFIDENCE SCORE ------------------
+    confidence = random.randint(75, 99)
+    for i in range(0, confidence, 5):
+        status.markdown(
+            f"<span style='color:#00ff41'>🧠 Calculating confidence using vibes… {i}%</span>",
+            unsafe_allow_html=True
+        )
+        time.sleep(0.15)
+
+    st.success(f"🧠 Prediction Confidence: {confidence}% (Certified by Mars)")
+
+    # ------------------ FINAL PREDICTION ------------------
     tomorrow = datetime.date.today() + datetime.timedelta(days=1)
-    energy = random.choice(["High ⚡", "Medium 🙂", "Low 🪫"])
-    luck = random.randint(1, 10)
 
+    energy = random.choice(["High ⚡", "Medium 🙂", "Low 🪫"])
     productivity = random.choice([
         "🔥 Extremely Productive",
-        "🙂 Decent Work Done",
+        "🙂 Decent work done",
         "😴 Productivity went on leave",
         "📱 Busy pretending to work"
     ])
+    luck = random.randint(1, 10)
 
     events = [
         "You will say 'kal se pakka' at least once 😂",
         "You will open WhatsApp and forget why 🤔",
         "You will feel hungry right after eating 🍔",
-        "You will plan big things at night 🌙",
+        "You will plan life decisions at 2 AM 🌙",
         "You will check phone for no reason 📱"
     ]
 
-    # ------------------ OUTPUT ------------------
-    st.success(f"📅 Prediction for {tomorrow}")
-    st.write(f"👤 Name: **{name}**")
-    st.write(f"⚡ Energy Level: **{energy}**")
-    st.write(f"📊 Productivity: **{productivity}**")
-    st.write(f"🍀 Luck Level: **{luck}/10**")
+    st.markdown("---")
+    st.markdown(f"<span style='color:#00ff41'>📅 Prediction for {tomorrow}</span>", unsafe_allow_html=True)
+    st.markdown(f"<span style='color:#00ff41'>👤 Name: <b>{name}</b></span>", unsafe_allow_html=True)
+    st.markdown(f"<span style='color:#00ff41'>⚡ Energy Level: <b>{energy}</b></span>", unsafe_allow_html=True)
+    st.markdown(f"<span style='color:#00ff41'>📊 Productivity: <b>{productivity}</b></span>", unsafe_allow_html=True)
+    st.markdown(f"<span style='color:#00ff41'>🍀 Luck Level: <b>{luck}/10</b></span>", unsafe_allow_html=True)
     st.info(f"😂 Special Event: {random.choice(events)}")
 
     if luck >= 8:
@@ -144,4 +182,4 @@ if st.button("🚀 Start Prediction"):
 
 # ------------------ FOOTER ------------------
 st.markdown("---")
-st.caption("⚠️ Disclaimer: This app is more accurate than most horoscopes 😎")
+st.caption("⚠️ Disclaimer: Accuracy improves after chai ☕")
