@@ -64,7 +64,7 @@ st.markdown(
 )
 
 # ------------------ USER INPUT ------------------
-name = st.text_input("Enter your name:", "Ankit")
+name = st.text_input("Enter your name:", " ")
 
 # ------------------ TYPEWRITER (FIXED VISIBILITY) ------------------
 def type_writer(text, delay=0.04):
